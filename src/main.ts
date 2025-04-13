@@ -165,6 +165,10 @@ export const tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;
       });
     });
 
+    fastify.get('/health', async (request, reply) => {
+      reply.send({ status: 'OK' });
+    });
+
     // fastify.listen({ port: PORT, host: '0.0.0.0' }, (e, address) => {
     //   if (e) throw e;
     //   console.log(`server listening on ${address}`);
