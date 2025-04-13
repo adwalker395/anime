@@ -32,8 +32,8 @@ ENV NPM_CONFIG_LOGLEVEL=warn
 COPY --chown=nodejs:nodejs package*.json ./
 
 # install dependencies here, for better reuse of layers
-# RUN npm install && npm update && npm cache clean --force
-RUN yarn install --frozen-lockfile && yarn cache clean
+RUN npm install && npm update && npm cache clean --force
+# RUN yarn install --frozen-lockfile && yarn cache clean
 
 # copy all sources in the container (exclusions in .dockerignore file)
 COPY --chown=nodejs:nodejs . .
@@ -57,6 +57,7 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s CMD npm run healthcheck-manual
 
 # ENTRYPOINT [ "node" ]
-CMD [ "npm", "start" ]
+# CMD [ "npm", "start" ]
+CMD ["node", "dist/main.js"]
 
 # end.
