@@ -163,13 +163,16 @@ export const tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;
     //   if (e) throw e;
     //   console.log(`server listening on ${address}`);
     // });
+    console.log('🚀 Starting server...');
+
     fastify.listen({ port: PORT, host: '0.0.0.0' }, (err, address) => {
       if (err) {
-        fastify.log.error(err);
+        console.error('❌ Server failed to start:', err);
         process.exit(1);
       }
-      fastify.log.info(`Server listening on ${address}`);
+      console.log(`✅ Server listening at ${address}`);
     });
+
   } catch (err: any) {
     fastify.log.error(err);
     process.exit(1);
