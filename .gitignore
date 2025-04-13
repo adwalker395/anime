@@ -3,8 +3,8 @@ yarn-error.log
 .env
 src/scripts
 .vscode
-yarn.lock
+# yarn.lock
 test.ts
 dist
 package-lock.json
-yarn.lock
+# yarn.lock
