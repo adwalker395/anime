@@ -48,26 +48,31 @@ const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
 
   fastify.get('/info/:id', async (request: FastifyRequest, reply: FastifyReply) => {
     const id = decodeURIComponent((request.params as { id: string }).id);
-
+  
     try {
-      const res = redis ? await cache.fetch(
-        redis as Redis,
-        `${redisPrefix}info;${id}`,
-        async () => await gogoanime
-        .fetchAnimeInfo(id)
-        .catch((err) => reply.status(404).send({ message: err })),
-        redisCacheTime,
-      ) : await gogoanime
-      .fetchAnimeInfo(id)
-      .catch((err) => reply.status(404).send({ message: err }));
-
-      reply.status(200).send(res);
-    } catch (err) {
-      reply
-        .status(500)
-        .send({ message: 'Something went wrong. Please try again later.' });
+      const res = redis
+        ? await cache.fetch(
+            redis as Redis,
+            `${redisPrefix}info;${id}`,
+            async () => {
+              const info = await gogoanime.fetchAnimeInfo(id);
+              return info;
+            },
+            redisCacheTime,
+          )
+        : await gogoanime.fetchAnimeInfo(id);
+  
+      return reply.status(200).send(res);
+  
+    } catch (err: any) {
+      console.error('Error in /info/:id:', err?.message || err);
+      return reply.status(500).send({
+        error: true,
+        message: err?.message || 'Something went wrong. Please try again later.',
+      });
     }
   });
+  
 
   fastify.get('/genre/:genre', async (request: FastifyRequest, reply: FastifyReply) => {
     const genre = (request.params as { genre: string }).genre;
