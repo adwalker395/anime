@@ -27,7 +27,7 @@ const meta_1 = __importDefault(require("./routes/meta"));
 const news_1 = __importDefault(require("./routes/news"));
 const chalk_1 = __importDefault(require("chalk"));
 const utils_1 = __importDefault(require("./utils"));
-const PORT = parseInt(process.env.PORT || '4000', 10);
+const PORT = parseInt(process.env.PORT || '3000', 10);
 exports.redis = process.env.REDIS_HOST &&
     new ioredis_1.default({
         host: process.env.REDIS_HOST,
@@ -148,20 +148,20 @@ exports.tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;
                 error: 'page not found',
             });
         });
-        fastify.get('/health', (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-            reply.send({ status: 'OK' });
-        }));
+        fastify.get('/health', (_, reply) => {
+            return reply.send({ status: 'OK' });
+        });
         // fastify.listen({ port: PORT, host: '0.0.0.0' }, (e, address) => {
         //   if (e) throw e;
         //   console.log(`server listening on ${address}`);
         // });
         console.log('🚀 Starting server...');
-        fastify.listen({ port: PORT, host: '0.0.0.0' }, (err, address) => {
+        fastify.listen({ port: PORT, host: '0.0.0.0' }, (err) => {
             if (err) {
-                console.error('❌ Server failed to start:', err);
+                console.error('Server failed to start:', err);
                 process.exit(1);
             }
-            console.log(`✅ Server listening at ${address}`);
+            console.log(`Server listening on port ${PORT}`);
         });
     }
     catch (err) {

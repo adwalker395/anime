@@ -3,10 +3,10 @@
     "version": "1.0.0",
     "main": "src/main.ts",
     "scripts": {
-        "start": "npm run build && node dist/main.js",
-        "dev": "nodemon src/main.ts",
+        "start": "node dist/main.js",
         "build": "tsc",
-        "lint": "prettier --write \"src/**/*.ts\""
+        "postinstall": "npm run build",
+        "prestart": "node -e \"require('./dist/main.js')\""
     },
     "engines": {
         "node": ">=12.5.0 <21.0.0",

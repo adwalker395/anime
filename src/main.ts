@@ -14,7 +14,13 @@ import meta from './routes/meta';
 import news from './routes/news';
 import chalk from 'chalk';
 import Utils from './utils';
-const PORT = parseInt(process.env.PORT || '4000', 10);
+const PORT = parseInt(process.env.PORT || '3000', 10);
+
+console.log('Environment Variables:', {
+  PORT: process.env.PORT,
+  NODE_ENV: process.env.NODE_ENV,
+  REDIS_HOST: process.env.REDIS_HOST ? 'set' : 'not set'
+});
 
 export const redis =
   process.env.REDIS_HOST &&
@@ -164,9 +170,9 @@ export const tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;
         error: 'page not found',
       });
     });
-
-    fastify.get('/health', async (request, reply) => {
-      reply.send({ status: 'OK' });
+    
+    fastify.get('/health', (_, reply) => {
+      return reply.send({ status: 'OK' });
     });
 
     // fastify.listen({ port: PORT, host: '0.0.0.0' }, (e, address) => {
@@ -175,12 +181,12 @@ export const tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;
     // });
     console.log('🚀 Starting server...');
 
-    fastify.listen({ port: PORT, host: '0.0.0.0' }, (err, address) => {
+    fastify.listen({ port: PORT, host: '0.0.0.0' }, (err) => {
       if (err) {
-        console.error('❌ Server failed to start:', err);
+        console.error('Server failed to start:', err);
         process.exit(1);
       }
-      console.log(`✅ Server listening at ${address}`);
+      console.log(`Server listening on port ${PORT}`);
     });
 
   } catch (err: any) {
