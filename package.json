@@ -3,10 +3,9 @@
     "version": "1.0.0",
     "main": "src/main.ts",
     "scripts": {
-        "start": "ts-node src/main.ts",
-        "dev": "nodemon src/main.ts",
+        "start": "node dist/main.js",
         "build": "tsc",
-        "lint": "prettier --write \"src/**/*.ts\""
+        "healthcheck-manual": "curl -f http://localhost:3000/health || exit 1"
     },
     "engines": {
         "node": ">=12.5.0 <21.0.0",
