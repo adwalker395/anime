@@ -57,7 +57,6 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s CMD npm run healthcheck-manual
 
 # ENTRYPOINT [ "node" ]
-# CMD [ "npm", "start" ]
-CMD ["node", "dist/main.js"]
+CMD [ "npm", "start" ]
 
 # end.
