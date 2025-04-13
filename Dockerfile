@@ -43,6 +43,9 @@ COPY --chown=nodejs:nodejs . .
 # FROM node:lts-alpine AS release
 # COPY --from=builder /dist /dist
 
+# Compile TypeScript to JavaScript
+RUN npx tsc
+
 # exposed port/s
 EXPOSE 3000
 
