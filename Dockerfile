@@ -34,7 +34,6 @@ COPY --chown=nodejs:nodejs package*.json ./
 # install dependencies here, for better reuse of layers
 # RUN npm install && npm update && npm cache clean --force
 RUN yarn install --frozen-lockfile && yarn cache clean
-RUN npm install --loglevel verbose && npm cache clean --force
 
 # copy all sources in the container (exclusions in .dockerignore file)
 COPY --chown=nodejs:nodejs . .
