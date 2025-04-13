@@ -14,7 +14,7 @@ import meta from './routes/meta';
 import news from './routes/news';
 import chalk from 'chalk';
 import Utils from './utils';
-const PORT = parseInt(process.env.PORT || '3000', 10);
+const PORT = parseInt(process.env.PORT || '4000', 10);
 
 export const redis =
   process.env.REDIS_HOST &&
@@ -23,6 +23,13 @@ export const redis =
     port: Number(process.env.REDIS_PORT),
     password: process.env.REDIS_PASSWORD,
   });
+  if (redis) {
+    redis.on('error', (err) => {
+      console.error('Redis connection error:', err);
+    });
+  }
+console.log(process.env.REDIS_HOST, process.env.REDIS_PORT, process.env.REDIS_PASSWORD);
+  
 
 const fastify = Fastify({
   maxParamLength: 1000,
