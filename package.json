@@ -9,7 +9,7 @@
         "lint": "prettier --write \"src/**/*.ts\""
     },
     "engines": {
-        "node": ">=12.5.0",
+        "node": "18.x",
         "yarn": ">=1.17.3"
     },
     "repository": {
@@ -34,7 +34,7 @@
         "fastify": "^4.10.2",
         "ioredis": "^5.2.4",
         "reconnecting-websocket": "^4.4.0",
-        "ts-node": "^10.9.1",
+        "ts-node": "^10.9.2",
         "ws": "^8.8.1"
     },
     "devDependencies": {
