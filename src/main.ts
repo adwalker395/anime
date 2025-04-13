@@ -14,6 +14,7 @@ import meta from './routes/meta';
 import news from './routes/news';
 import chalk from 'chalk';
 import Utils from './utils';
+const PORT = parseInt(process.env.PORT || '3000', 10);
 
 export const redis =
   process.env.REDIS_HOST &&
@@ -158,9 +159,16 @@ export const tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;
       });
     });
 
-    fastify.listen({ port: PORT, host: '0.0.0.0' }, (e, address) => {
-      if (e) throw e;
-      console.log(`server listening on ${address}`);
+    // fastify.listen({ port: PORT, host: '0.0.0.0' }, (e, address) => {
+    //   if (e) throw e;
+    //   console.log(`server listening on ${address}`);
+    // });
+    fastify.listen({ port: PORT, host: '0.0.0.0' }, (err, address) => {
+      if (err) {
+        fastify.log.error(err);
+        process.exit(1);
+      }
+      fastify.log.info(`Server listening on ${address}`);
     });
   } catch (err: any) {
     fastify.log.error(err);
