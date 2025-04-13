@@ -28,6 +28,11 @@ const news_1 = __importDefault(require("./routes/news"));
 const chalk_1 = __importDefault(require("chalk"));
 const utils_1 = __importDefault(require("./utils"));
 const PORT = parseInt(process.env.PORT || '3000', 10);
+console.log('Environment Variables:', {
+    PORT: process.env.PORT,
+    NODE_ENV: process.env.NODE_ENV,
+    REDIS_HOST: process.env.REDIS_HOST ? 'set' : 'not set'
+});
 exports.redis = process.env.REDIS_HOST &&
     new ioredis_1.default({
         host: process.env.REDIS_HOST,
