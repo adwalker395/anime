@@ -14,6 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tmdbApi = exports.redis = void 0;
 require('dotenv').config();
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('🚨 Unhandled Rejection at:', promise, 'reason:', reason);
+});
+process.on('uncaughtException', (err) => {
+    console.error('💥 Uncaught Exception:', err);
+});
 const ioredis_1 = __importDefault(require("ioredis"));
 const fastify_1 = __importDefault(require("fastify"));
 const cors_1 = __importDefault(require("@fastify/cors"));
@@ -46,9 +52,14 @@ if (exports.redis) {
 }
 console.log(process.env.REDIS_HOST, process.env.REDIS_PORT, process.env.REDIS_PASSWORD);
 const fastify = (0, fastify_1.default)({
-    maxParamLength: 1000,
-    logger: true,
+    logger: {
+        transport: {
+            target: 'pino-pretty', // pretty logs for Railway
+        },
+        level: 'debug', // more verbose logs
+    },
 });
+console.log('✅ Fastify instance created');
 exports.tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     yield fastify.register(cors_1.default, {
@@ -165,6 +176,7 @@ exports.tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;
         console.log(`✅ Server listening on http://0.0.0.0:${PORT}`);
     }
     catch (err) {
+        console.error('🔥 Failed to start server:', err);
         fastify.log.error(err);
         process.exit(1);
     }

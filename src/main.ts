@@ -1,4 +1,12 @@
 require('dotenv').config();
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('🚨 Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('💥 Uncaught Exception:', err);
+});
+
 import Redis from 'ioredis';
 import Fastify from 'fastify';
 import FastifyCors from '@fastify/cors';
@@ -38,9 +46,15 @@ console.log(process.env.REDIS_HOST, process.env.REDIS_PORT, process.env.REDIS_PA
   
 
 const fastify = Fastify({
-  maxParamLength: 1000,
-  logger: true,
+  logger: {
+    transport: {
+      target: 'pino-pretty', // pretty logs for Railway
+    },
+    level: 'debug', // more verbose logs
+  },
 });
+console.log('✅ Fastify instance created');
+
 export const tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;
 (async () => {
 
@@ -187,6 +201,7 @@ export const tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;
     
 
   } catch (err: any) {
+    console.error('🔥 Failed to start server:', err);
     fastify.log.error(err);
     process.exit(1);
   }
