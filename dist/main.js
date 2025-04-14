@@ -51,13 +51,23 @@ if (exports.redis) {
     });
 }
 console.log(process.env.REDIS_HOST, process.env.REDIS_PORT, process.env.REDIS_PASSWORD);
+const isDev = process.env.NODE_ENV !== 'production';
 const fastify = (0, fastify_1.default)({
-    logger: {
-        transport: {
-            target: 'pino-pretty', // pretty logs for Railway
+    logger: isDev
+        ? {
+            transport: {
+                target: 'pino-pretty',
+                options: {
+                    colorize: true,
+                    translateTime: 'HH:MM:ss.l',
+                    ignore: 'pid,hostname',
+                },
+            },
+            level: 'debug',
+        }
+        : {
+            level: 'info', // production logging in structured JSON
         },
-        level: 'debug', // more verbose logs
-    },
 });
 console.log('✅ Fastify instance created');
 exports.tmdbApi = process.env.TMDB_KEY && process.env.TMDB_KEY;

@@ -44,14 +44,24 @@ export const redis =
   }
 console.log(process.env.REDIS_HOST, process.env.REDIS_PORT, process.env.REDIS_PASSWORD);
   
+const isDev = process.env.NODE_ENV !== 'production';
 
 const fastify = Fastify({
-  logger: {
-    transport: {
-      target: 'pino-pretty', // pretty logs for Railway
-    },
-    level: 'debug', // more verbose logs
-  },
+  logger: isDev
+    ? {
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+            translateTime: 'HH:MM:ss.l',
+            ignore: 'pid,hostname',
+          },
+        },
+        level: 'debug',
+      }
+    : {
+        level: 'info', // production logging in structured JSON
+      },
 });
 console.log('✅ Fastify instance created');
 
